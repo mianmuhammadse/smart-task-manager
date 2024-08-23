@@ -2,7 +2,7 @@ const log = {
 	info: (...text: any) => {
 		console.log(
 			new Date().toLocaleString('en-PK', { timeZone: 'Asia/Karachi' }) +
-				'#INFO#',
+				' #INFO#',
 			...text
 		);
 	},
@@ -10,7 +10,7 @@ const log = {
 		if (process.env.LOGGER_DEBUG) {
 			console.log(
 				new Date().toLocaleString('en-PK', { timeZone: 'Asia/Karachi' }) +
-					'#DEBUG#',
+					' #DEBUG#',
 				...text
 			);
 		}
@@ -18,7 +18,7 @@ const log = {
 	error: (...text: any) => {
 		console.error(
 			new Date().toLocaleString('en-PK', { timeZone: 'Asia/Karachi' }) +
-				'#ERROR#',
+				' #ERROR#',
 			...text
 		);
 	}

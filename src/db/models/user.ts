@@ -1,27 +1,32 @@
+import { Model, Sequelize, DataTypes } from 'sequelize';
 
-const User = function (sequelize, DataTypes) {
+export class User extends Model {
+	public id!: number;
+	public name!: string;
+	public email!: string;
+}
 
-	return sequelize.define('users', {
-		id: {
-			autoIncrement: true,
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			primaryKey: true
+export function initializeUserModel(sequelize: Sequelize): void {
+	User.init(
+		{
+			id: {
+				type: DataTypes.INTEGER,
+				autoIncrement: true,
+				primaryKey: true,
+			},
+			name: {
+				type: new DataTypes.STRING(128),
+				allowNull: false,
+			},
+			email: {
+				type: new DataTypes.STRING(128),
+				allowNull: false,
+			},
 		},
-		name: {
-			type: DataTypes.STRING(255),
-			allowNull: false
-		},
-		email: {
-			type: DataTypes.STRING(255),
-			allowNull: false,
-			unique: 'users_email_key'
+		{
+			tableName: 'users',
+			timestamps: true,
+			sequelize,
 		}
-	}, {
-		tableName: 'users',
-		timestamps: true
-	});
-	
-};
-
-export default User;
+	);
+}
