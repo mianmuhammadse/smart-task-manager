@@ -1,11 +1,11 @@
-type ErrorResponse = {
+export type ErrorResponse = {
 	success: false;
 	message: string;
-	statusCode?: number;
+	statusCode: number;
 	errors?: any;
 };
 
-type SuccessResponse = {
+export type SuccessResponse = {
 	success: true;
 	data: any;
 	message: string;
@@ -18,21 +18,16 @@ type SuccessResponse = {
 	};
 };
 
-export const errorResponse = (message = 'An error occurred', statusCode = null, errors = null) => {
+export const errorResponse = (message: string, statusCode: number, errors: any) => {
 	const response: ErrorResponse = {
 		success: false,
 		message,
+		statusCode
 	};
 
 	if (statusCode) {
 		if (statusCode >= 400 && statusCode < 500) {
-			if (statusCode === 400) {
-				response.statusCode = statusCode;
-			} else if (statusCode === 409) {
-				response.statusCode = statusCode;
-			} else if (statusCode === 404) {
-				response.statusCode = statusCode;
-			}
+			response.statusCode = statusCode;
 		}
 	}
 
@@ -41,7 +36,7 @@ export const errorResponse = (message = 'An error occurred', statusCode = null, 
 	return response;
 };
 
-export const successResponse = (data, message = 'Request was successful', statusCode = 200, meta = null) => {
+export const successResponse = (data: any, message: string, statusCode: number, meta?: any) => {
 	const response: SuccessResponse = {
 		success: true,
 		data: data,
