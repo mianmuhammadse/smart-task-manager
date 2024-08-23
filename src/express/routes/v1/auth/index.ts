@@ -23,12 +23,26 @@ const authRoutes = () => {
 			const data: any = await authService.loginUser(req.body);
 			const idToken = data?.data?.idToken;
 
-			if(!idToken) {
+			if (idToken) {
 				res.cookie('token', idToken, {
 					httpOnly: true,
-				})
+				});
 			}
 
+			res.status(data.statusCode).send(data);
+		} catch (error: any) {
+			log.error(error);
+			res.status(500).send({
+				status: 500,
+				message: 'Internal Server Error',
+			});
+		}
+	});
+
+	router.post('/logout', async (req: Request, res: Response) => {
+		try {
+			const data: any = await authService.logOutUser();
+			res.clearCookie('token');
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
 			log.error(error);

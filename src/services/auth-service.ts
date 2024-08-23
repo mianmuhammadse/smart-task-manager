@@ -3,10 +3,12 @@ import {
 	sendEmailVerification,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
+	signOut,
 	getAuth,
 } from '../firebase';
 import { User } from '../db/models/user';
 import log from '../utils/log';
+import { Response } from 'express';
 
 const auth = getAuth();
 
@@ -80,7 +82,6 @@ const authService = {
 			};
 			const data = { idToken, user: userToReturn };
 
-			// log.info('ID Token: ',idToken);
 			return successResponse(data, 'User logged in successfully', 200);
 		} catch (error: any) {
 			const errors: any = {};
@@ -89,6 +90,11 @@ const authService = {
 			}
 			return errorResponse('Invalid credentials', 422, errors);
 		}
+	},
+
+	logOutUser: async () => {
+		await signOut(auth);
+		return successResponse({}, 'User logged out successfully', 200);
 	},
 };
 

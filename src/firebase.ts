@@ -1,5 +1,6 @@
 import 'dotenv/config';
-import { initializeApp } from 'firebase/app';
+import { initializeApp, FirebaseApp } from 'firebase/app';
+import * as admin from 'firebase-admin';
 import {
 	getAuth,
 	createUserWithEmailAndPassword,
@@ -8,6 +9,9 @@ import {
 	sendEmailVerification,
 	sendPasswordResetEmail,
 } from 'firebase/auth';
+import firebaseAccountCredentials from './firebaseService.json';
+
+const serviceAccount = firebaseAccountCredentials as admin.ServiceAccount;
 
 const firebaseConfig = {
 	apiKey: process.env.FIREBASE_API_KEY,
@@ -18,9 +22,17 @@ const firebaseConfig = {
 	appId: process.env.FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+
+const firebase: FirebaseApp = initializeApp(firebaseConfig);
+
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+})
 
 export {
+	firebase,
+	admin,
 	getAuth,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
