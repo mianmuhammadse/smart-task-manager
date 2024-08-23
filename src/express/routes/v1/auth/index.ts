@@ -20,7 +20,15 @@ const authRoutes = () => {
 
 	router.post('/login', async (req: Request, res: Response) => {
 		try {
-			const data = await authService.loginUser(req.body);
+			const data: any = await authService.loginUser(req.body);
+			const idToken = data?.data?.idToken;
+
+			if(!idToken) {
+				res.cookie('token', idToken, {
+					httpOnly: true,
+				})
+			}
+
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
 			log.error(error);

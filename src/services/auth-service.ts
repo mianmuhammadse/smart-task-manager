@@ -5,6 +5,8 @@ import {
 	signInWithEmailAndPassword,
 	getAuth,
 } from '../firebase';
+import { User } from '../db/models/user';
+import log from '../utils/log';
 
 const auth = getAuth();
 
@@ -24,15 +26,27 @@ const authService = {
 			return errorResponse('Validation failed', 422, errors);
 		}
 
-		try {
-			const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-			await sendEmailVerification(userCredentials.user);
-			return successResponse(userCredentials, 'User created successfully and verification email sent!', 200);
-		} catch (error: any) {
+		const existingUser = await User.findOne({ where: { email } });
+
+		if (existingUser) {
 			return errorResponse('Email already in use', 400, {
 				email: 'Email already in use',
 			});
 		}
+
+		const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+		const { user } = userCredentials;
+
+		const newUser = await User.create({
+			email: user.email,
+			firebaseId: user.uid,
+			photoURL: user.providerData[0].photoURL,
+			displayName: user.providerData[0].displayName,
+		});
+
+		await sendEmailVerification(userCredentials.user);
+
+		return successResponse(newUser, 'User created successfully and verification email sent!', 200);
 	},
 	loginUser: async ({
 		email,
@@ -50,10 +64,24 @@ const authService = {
 		}
 
 		try {
-			const userCredentials = await signInWithEmailAndPassword(auth, email, password);
-			console.log(userCredentials);
+			const existingUser = await User.findOne({ where: { email } });
 
-			return successResponse(userCredentials, 'User logged in successfully', 200);
+			if (!existingUser) {
+				return errorResponse('Invalid credentials', 422, {
+					email: 'Invalid credentials',
+				});
+			}
+			const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+			const idToken = await userCredentials.user.getIdToken();
+			const userToReturn = {
+				email: userCredentials.user.email,
+				displayName: userCredentials.user.displayName,
+				photoURL: userCredentials.user.photoURL,
+			};
+			const data = { idToken, user: userToReturn };
+
+			// log.info('ID Token: ',idToken);
+			return successResponse(data, 'User logged in successfully', 200);
 		} catch (error: any) {
 			const errors: any = {};
 			if (error.code === 'auth/invalid-credential') {
