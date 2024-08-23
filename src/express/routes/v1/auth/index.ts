@@ -52,6 +52,19 @@ const authRoutes = () => {
 			});
 		}
 	});
+	
+	router.post('/forgot-password', async (req: Request, res: Response) => {
+		try {
+			const data: any = await authService.resetPassword(req.body);
+			res.status(data.statusCode).send(data);
+		} catch (error: any) {
+			log.error(error);
+			res.status(500).send({
+				status: 500,
+				message: 'Internal Server Error',
+			});
+		}
+	});
 
 	return router;
 };

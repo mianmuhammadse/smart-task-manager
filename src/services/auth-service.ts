@@ -5,6 +5,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	getAuth,
+	sendPasswordResetEmail,
 } from '../firebase';
 import { User } from '../db/models/user';
 import log from '../utils/log';
@@ -73,8 +74,10 @@ const authService = {
 					email: 'Invalid credentials',
 				});
 			}
+
 			const userCredentials = await signInWithEmailAndPassword(auth, email, password);
 			const idToken = await userCredentials.user.getIdToken();
+
 			const userToReturn = {
 				email: userCredentials.user.email,
 				displayName: userCredentials.user.displayName,
@@ -96,6 +99,18 @@ const authService = {
 		await signOut(auth);
 		return successResponse({}, 'User logged out successfully', 200);
 	},
+
+	resetPassword: async ({ email }: { email: string }): Promise<ErrorResponse | SuccessResponse> => {
+		if(!email) {
+			const errors = {
+				email: 'Email is required',
+			};
+			return errorResponse('Validation failed', 422, errors);
+		}
+
+		await sendPasswordResetEmail(auth, email);
+		return successResponse({}, 'Password reset email sent', 200);
+	}
 };
 
 export default authService;
