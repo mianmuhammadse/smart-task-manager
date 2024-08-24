@@ -8,8 +8,6 @@ import {
 	sendPasswordResetEmail,
 } from '../firebase';
 import { User } from '../db/models/user';
-import log from '../utils/log';
-import { Response } from 'express';
 
 const auth = getAuth();
 

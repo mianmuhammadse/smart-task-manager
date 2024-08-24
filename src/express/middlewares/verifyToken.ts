@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { admin } from '../../firebase';
-import { errorResponse } from '../../utils/common-utils';
 import log from '../../utils/log';
 
 declare global {

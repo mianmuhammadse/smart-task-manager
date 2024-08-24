@@ -29,6 +29,8 @@ const authRoutes = () => {
 				});
 			}
 
+			delete data.data.idToken;
+
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
 			log.error(error);
