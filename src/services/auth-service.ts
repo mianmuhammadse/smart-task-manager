@@ -6,6 +6,7 @@ import {
 	signOut,
 	getAuth,
 	sendPasswordResetEmail,
+	admin,
 } from '../firebase';
 import { User } from '../db/models/user';
 
@@ -36,6 +37,8 @@ const authService = {
 		}
 
 		const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+		await admin.auth().setCustomUserClaims(userCredentials.user.uid, { role: 'user' });
+
 		const { user } = userCredentials;
 
 		const newUser = await User.create({
@@ -75,13 +78,15 @@ const authService = {
 
 			const userCredentials = await signInWithEmailAndPassword(auth, email, password);
 			const idToken = await userCredentials.user.getIdToken();
+			const user = await admin.auth().getUser(userCredentials.user.uid);
+			const role = user.customClaims?.role;
 
 			const userToReturn = {
 				email: userCredentials.user.email,
 				displayName: userCredentials.user.displayName,
 				photoURL: userCredentials.user.photoURL,
 			};
-			const data = { idToken, user: userToReturn };
+			const data = { idToken, role, user: userToReturn };
 
 			return successResponse(data, 'User logged in successfully', 200);
 		} catch (error: any) {
@@ -109,6 +114,10 @@ const authService = {
 		await sendPasswordResetEmail(auth, email);
 		return successResponse({}, 'Password reset email sent', 200);
 	},
+
+	protectedRoute: async () => {
+		return successResponse({ message: 'Protected Route' }, 'Successful Response', 200);
+	}
 };
 
 export default authService;

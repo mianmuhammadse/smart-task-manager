@@ -10,11 +10,13 @@ declare global {
 	}
 }
 
-const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
-	const idToken = req.cookies.token;
-	if (!idToken) {
-		return res.status(403).send({
-			status: 403,
+const verifyTokenAndRole = async (req: Request, res: Response, next: NextFunction) => {
+	const idToken = req.headers.cookie?.split(';')[0].split('=')[1];
+	const userRole = req.headers.cookie?.split(';')[1].split('=')[1];
+
+	if (!idToken || !userRole) {
+		return res.status(401).send({
+			status: 401,
 			message: 'No Token Provided',
 		});
 	}
@@ -25,11 +27,11 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
 		next();
 	} catch (error) {
 		log.error(error);
-		return res.status(403).send({
-			status: 403,
+		return res.status(401).send({
+			status: 401,
 			message: 'Invalid Token',
 		});
 	}
 };
 
-export default verifyToken;
+export default verifyTokenAndRole;
