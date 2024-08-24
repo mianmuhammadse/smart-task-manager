@@ -1,11 +1,13 @@
 import { Request, Response, Router } from 'express';
 import log from '../../../../utils/log';
 import authService from '../../../../services/auth-service';
+import validate from '../../../middlewares/validations/validate';
+import { registerSchema, loginSchema } from '../../../middlewares/validations/schemas';
 
 const router = Router();
 
 const authRoutes = () => {
-	router.post('/register', async (req: Request, res: Response) => {
+	router.post('/register', validate(registerSchema), async (req: Request, res: Response) => {
 		try {
 			const data = await authService.register(req.body);
 			res.status(data.statusCode).send(data);
@@ -18,7 +20,7 @@ const authRoutes = () => {
 		}
 	});
 
-	router.post('/login', async (req: Request, res: Response) => {
+	router.post('/login', validate(loginSchema),async (req: Request, res: Response) => {
 		try {
 			const data: any = await authService.loginUser(req.body);
 			const idToken = data?.data?.idToken;
