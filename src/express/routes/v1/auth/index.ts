@@ -20,7 +20,7 @@ const authRoutes = () => {
 		}
 	});
 
-	router.post('/login', validate(loginSchema),async (req: Request, res: Response) => {
+	router.post('/login', validate(loginSchema), async (req: Request, res: Response) => {
 		try {
 			const data: any = await authService.loginUser(req.body);
 			const idToken = data?.data?.idToken;
@@ -56,7 +56,7 @@ const authRoutes = () => {
 			});
 		}
 	});
-	
+
 	router.post('/forgot-password', async (req: Request, res: Response) => {
 		try {
 			const data: any = await authService.resetPassword(req.body);

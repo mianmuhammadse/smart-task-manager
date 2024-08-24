@@ -5,7 +5,6 @@ import dbModelInitializer from './models';
 import { User } from './models/user';
 import { Task } from './models/task';
 
-
 const env = process.env.NODE_ENV || 'development';
 const envConfig = config[env];
 log.info(' Dialect config: ', envConfig);
@@ -24,11 +23,11 @@ let db: Database = {
 	}),
 };
 
-dbModelInitializer.forEach(initializer => {
+dbModelInitializer.forEach((initializer) => {
 	initializer(db.sequelize);
 });
 
-User.hasMany(Task, { foreignKey: 'userId', as : 'tasks' });
-Task.belongsTo(User, { foreignKey: 'userId', as : 'user' });
+User.hasMany(Task, { foreignKey: 'userId', as: 'tasks' });
+Task.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 export default db;

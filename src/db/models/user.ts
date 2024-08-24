@@ -18,22 +18,22 @@ export function initializeUserModel(sequelize: Sequelize): void {
 				primaryKey: true,
 			},
 			email: {
-				type: new DataTypes.STRING,
+				type: new DataTypes.STRING(),
 				allowNull: false,
 				unique: true,
 			},
 			displayName: {
-				type: new DataTypes.STRING,
+				type: new DataTypes.STRING(),
 				allowNull: true,
 				field: 'display_name',
 			},
 			photoURL: {
-				type: new DataTypes.STRING,
+				type: new DataTypes.STRING(),
 				allowNull: true,
 				field: 'photo_url',
 			},
 			firebaseId: {
-				type: new DataTypes.STRING,
+				type: new DataTypes.STRING(),
 				allowNull: false,
 				field: 'firebase_id',
 				unique: true,
@@ -42,8 +42,7 @@ export function initializeUserModel(sequelize: Sequelize): void {
 				type: new DataTypes.ENUM('admin', 'user'),
 				defaultValue: 'user',
 				allowNull: false,
-
-			}
+			},
 		},
 		{
 			tableName: 'users',

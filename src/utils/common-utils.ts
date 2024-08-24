@@ -22,7 +22,7 @@ export const errorResponse = (message: string, statusCode: number, errors: any) 
 	const response: ErrorResponse = {
 		success: false,
 		message,
-		statusCode
+		statusCode,
 	};
 
 	if (statusCode) {

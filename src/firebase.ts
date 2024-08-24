@@ -22,13 +22,11 @@ const firebaseConfig = {
 	appId: process.env.FIREBASE_APP_ID,
 };
 
-
 const firebase: FirebaseApp = initializeApp(firebaseConfig);
-
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-})
+});
 
 export {
 	firebase,

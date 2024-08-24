@@ -4,6 +4,14 @@ import log from './utils/log';
 import 'dotenv/config';
 import db from './db';
 
+const PORT = process.env.PORT || 3000;
+
+log.info('Application starting ...');
+
+const app = setupServer();
+
+setupRoutes(app);
+
 db.sequelize
 	.authenticate()
 	.then(async () => {
@@ -12,14 +20,6 @@ db.sequelize
 	.catch((error) => {
 		log.error('Unable to connect to the database:', error);
 	});
-
-const PORT = process.env.PORT || 3000;
-
-const app = setupServer();
-
-log.info('Application starting ...');
-
-setupRoutes(app);
 
 app.listen(PORT, () => {
 	log.info(`App started on port ${PORT}`);

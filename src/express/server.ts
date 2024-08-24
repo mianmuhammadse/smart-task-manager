@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import log from '../utils/log';
 import cors from 'cors';
 
@@ -23,14 +23,23 @@ const setupThirdPartyMiddlewares = (app: Application) => {
 	};
 	app.use(cors(corsOptions));
 
-	log.debug('Setting up express.json()');
+	log.info('Setting up express.json()');
+
 	app.use(express.json());
 };
 
 const setupServer = function () {
-	const app = express();
+	const app: Application = express();
 	if (app) {
 		log.info('Setting up middleware...');
+
+		// global error handler
+		log.info('Setting up global error handler');
+
+		app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+			log.error(err.stack);
+			res.status(500).send({ error: err.message });
+		});
 
 		setupThirdPartyMiddlewares(app);
 	} else {

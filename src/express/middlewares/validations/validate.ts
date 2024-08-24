@@ -8,7 +8,7 @@ const validate = (schema: z.ZodSchema) => (req: Request, res: Response, next: Ne
 	} catch (error: any) {
 		const errors = error.errors.map((err: any) => ({ field: err.path[0], message: err.message }));
 		return res.status(400).json({
-			errors
+			errors,
 		});
 	}
 };

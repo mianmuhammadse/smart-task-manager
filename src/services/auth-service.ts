@@ -99,7 +99,7 @@ const authService = {
 	},
 
 	resetPassword: async ({ email }: { email: string }): Promise<ErrorResponse | SuccessResponse> => {
-		if(!email) {
+		if (!email) {
 			const errors = {
 				email: 'Email is required',
 			};
@@ -108,7 +108,7 @@ const authService = {
 
 		await sendPasswordResetEmail(auth, email);
 		return successResponse({}, 'Password reset email sent', 200);
-	}
+	},
 };
 
 export default authService;
