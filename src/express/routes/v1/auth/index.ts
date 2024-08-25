@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import log from '../../../../utils/log';
 import authService from '../../../../services/auth-service';
 import validate from '../../../middlewares/validations/validate';
 import { registerSchema, loginSchema } from '../../../middlewares/validations/schemas';
@@ -13,7 +12,7 @@ const authRoutes = () => {
 			const data = await authService.register(req.body);
 			res.status(data.statusCode).send(data);
 		} catch (error) {
-			log.error(error);
+			console.log(error);
 			res.status(500).send({
 				status: 500,
 				message: 'Internal Server Error',
@@ -37,7 +36,7 @@ const authRoutes = () => {
 
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
-			log.error(error);
+			console.log(error);
 			res.status(500).send({
 				status: 500,
 				message: 'Internal Server Error',
@@ -51,12 +50,12 @@ const authRoutes = () => {
 			res.clearCookie('token');
 			res.clearCookie('userRole');
 			req.session.destroy((err) => {
-				if (err) log.error(err);
-				log.info('User logged out successfully');
+				if (err) console.log(err);
+				console.log('User logged out successfully');
 			});
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
-			log.error(error);
+			console.log(error);
 			res.status(500).send({
 				status: 500,
 				message: 'Internal Server Error',
@@ -69,7 +68,7 @@ const authRoutes = () => {
 			const data: any = await authService.resetPassword(req.body);
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
-			log.error(error);
+			console.log(error);
 			res.status(500).send({
 				status: 500,
 				message: 'Internal Server Error',
@@ -82,7 +81,7 @@ const authRoutes = () => {
 			const data: any = await authService.protectedRoute();
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
-			log.error(error);
+			console.log(error);
 			res.status(500).send({
 				status: 500,
 				message: 'Internal Server Error',

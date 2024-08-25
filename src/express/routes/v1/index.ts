@@ -1,12 +1,11 @@
 import { Router, Application, Request, Response, NextFunction } from 'express';
 import userRoutes from './users';
 import authRoutes from './auth';
-import log from '../../../utils/log';
 
 const index = (app: Application) => {
 	app.use((req: Request, res: Response, next: NextFunction) => {
-		log.info(req.method, req.url);
-		log.info(req.session.id);
+		console.log(req.method, req.url);
+		console.log(req.session.id);
 		next();
 	});
 

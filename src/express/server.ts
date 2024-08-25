@@ -1,12 +1,12 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
-import log from '../utils/log';
 import cors from 'cors';
 import session, { Session } from 'express-session';
+import setupRoutes from './routes/routes';
 
 const setupThirdPartyMiddlewares = (app: Application) => {
-	log.info('Setting up third-party middleware');
+	console.log('Setting up third-party middleware');
 
-	log.info('Setting up cors()');
+	console.log('Setting up cors()');
 	let corsOptions = {
 		exposedHeaders: [
 			'Accept-Language',
@@ -24,10 +24,10 @@ const setupThirdPartyMiddlewares = (app: Application) => {
 	};
 	app.use(cors(corsOptions));
 
-	log.info('Setting up express.json()');
+	console.log('Setting up express.json()');
 	app.use(express.json());
 
-	log.info('Setting up express sessions.');
+	console.log('Setting up express sessions.');
 	app.use(session({
 		secret: process.env.SESSION_SECRET || 'secret',
 		resave: false,
@@ -44,17 +44,18 @@ const setupThirdPartyMiddlewares = (app: Application) => {
 const setupServer = function () {
 	const app: Application = express();
 	if (app) {
-		log.info('Setting up middleware...');
+		console.log('Setting up middleware...');
 
-		log.info('Setting up global error handler');
+		console.log('Setting up global error handler');
 		app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-			log.error(err.stack);
+			console.log(err.stack);
 			res.status(500).send({ error: err.message });
 		});
 
 		setupThirdPartyMiddlewares(app);
+		setupRoutes(app);
 	} else {
-		log.error('Undefined [app] provided');
+		console.log('Undefined [app] provided');
 	}
 	return app;
 };

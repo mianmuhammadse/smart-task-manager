@@ -1,26 +1,22 @@
-import setupRoutes from './express/routes/routes';
 import setupServer from './express/server';
-import log from './utils/log';
 import 'dotenv/config';
 import db from './db';
 
 const PORT = process.env.PORT || 3000;
 
-log.info('Application starting ...');
+console.log('Application starting ...')
 
-const app = setupServer();
-
-setupRoutes(app);
+export const app = setupServer();
 
 db.sequelize
 	.authenticate()
 	.then(async () => {
-		log.info('Connection has been established successfully.');
+		console.log('Connection has been established successfully.');
 	})
 	.catch((error) => {
-		log.error('Unable to connect to the database:', error);
+		console.log('Unable to connect to the database:', error);
 	});
 
 app.listen(PORT, () => {
-	log.info(`App started on port ${PORT}`);
+	console.log(`App started on port ${PORT}`);
 });
