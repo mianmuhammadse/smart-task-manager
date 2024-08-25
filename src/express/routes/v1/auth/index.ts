@@ -28,17 +28,8 @@ const authRoutes = () => {
 			const idToken = data?.data?.idToken;
 
 			if (idToken && userRole) {
-				res.cookie('token', idToken, {
-					httpOnly: true,
-					secure: true,
-					sameSite: 'strict',
-				});
-
-				res.cookie('userRole', userRole, {
-					httpOnly: true,
-					secure: true,
-					sameSite: 'strict',
-				});
+				res.cookie('token', idToken);
+				res.cookie('userRole', userRole);
 			}
 
 			delete data.data.idToken;
@@ -59,6 +50,10 @@ const authRoutes = () => {
 			const data: any = await authService.logOutUser();
 			res.clearCookie('token');
 			res.clearCookie('userRole');
+			req.session.destroy((err) => {
+				if (err) log.error(err);
+				log.info('User logged out successfully');
+			});
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
 			log.error(error);
