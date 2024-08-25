@@ -58,6 +58,7 @@ const authRoutes = () => {
 		try {
 			const data: any = await authService.logOutUser();
 			res.clearCookie('token');
+			res.clearCookie('userRole');
 			res.status(data.statusCode).send(data);
 		} catch (error: any) {
 			log.error(error);
