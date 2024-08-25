@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { admin } from '../../firebase';
-import log from '../../utils/log';
 
 declare global {
 	namespace Express {
@@ -26,7 +25,7 @@ const verifyTokenAndRole = async (req: Request, res: Response, next: NextFunctio
 		req.user = decodedToken;
 		next();
 	} catch (error) {
-		log.error(error);
+		console.log(error);
 		return res.status(401).send({
 			status: 401,
 			message: 'Invalid Token',

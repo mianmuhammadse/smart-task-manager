@@ -1,13 +1,12 @@
 import { Sequelize } from 'sequelize';
 import config from './config';
-import log from '../utils/log';
 import dbModelInitializer from './models';
 import { User } from './models/user';
 import { Task } from './models/task';
 
 const env = process.env.NODE_ENV || 'development';
 const envConfig = config[env];
-log.info(' Dialect config: ', envConfig);
+console.log(' Dialect config: ', envConfig);
 
 export interface Database {
 	sequelize: Sequelize;

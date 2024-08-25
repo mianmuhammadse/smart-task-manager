@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import userService from '../../../../services/users-service';
-import log from '../../../../utils/log';
+
 
 const router = Router();
 
@@ -10,7 +10,7 @@ const userRoutes = () => {
 			const data = await userService.helloUser();
 			res.status(data.statusCode).send(data);
 		} catch (error) {
-			log.error(error);
+			console.log(error);
 			res.status(500).send({
 				status: 500,
 				message: 'Internal Server Error',
